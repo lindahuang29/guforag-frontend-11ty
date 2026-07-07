@@ -1,0 +1,13 @@
+{# 手機版選單面板：資料沿用 header 的 menuItems #}
+<div class="mobile-nav">
+    <div class="overlay"></div>
+    <div class="mobile-menu-wrap">
+        <ul class="mobile-menu">
+            {% for item in menuItems %}
+            <li>
+                <a href="{{ item.href if item.href else '#'}}" title="{{ item.label }}">{{ item.label }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

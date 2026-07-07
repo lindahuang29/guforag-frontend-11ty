@@ -1,0 +1,19 @@
+{# 頁碼分頁
+    include 前 set dataTotal（總筆數），
+    pagination.js 會自動計算頁碼。 
+#}
+<div class="pagination" role="navigation" aria-label="頁碼分頁" data-total="{{ dataTotal }}">
+    <ul></ul>
+    <div class="page-info">
+        <span>共{{ dataTotal }}筆</span>
+        <div class="form-group">
+            <div class="field">
+                <select class="form-control" required>
+                    <option value="5" selected>5筆/頁</option>
+                    <option value="10">10筆/頁</option>
+                    <option value="15">15筆/頁</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

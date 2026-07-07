@@ -1,0 +1,96 @@
+@use "../../../scss/mixin" as *;
+
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.label {
+    flex-shrink: 0;
+    width: 130px;
+
+    &.label-auto {
+        width: auto;
+    }
+}
+
+.control-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-text-default);
+}
+
+.field {
+    flex-grow: 1;
+    position: relative;
+    width: 100%;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.4375rem 0.625rem;
+    box-sizing: border-box;
+    border-radius: 2px;
+    border: 2px solid var(--color-border-default);
+    background-color: transparent;
+    font-size: 1rem;
+    color: var(--color-text-default);
+    outline: none;
+    position: relative;
+    transition: all 0.3s;
+
+    &::placeholder {
+        color: var(--color-text-darker);
+    }
+
+    // select 停在 placeholder（選中空值 option）時，文字用次要色，模擬 placeholder 灰
+    // （input 無 option 子元素，不會被命中；只有 select 會）
+    &:has(option[value=""]:checked) {
+        color: var(--color-text-darker);
+    }
+
+    &.disabled,
+    &:disabled {
+        background-color: var(--color-neutral-500);
+        cursor: not-allowed;
+    }
+
+    &:focus {
+        border: 2px solid var(--color-border-info);
+        box-shadow: 0 0 4px 0 rgba(42, 128, 254, 0.2);
+    }
+
+    &:not(.disabled),
+    &:not(:disabled) {
+        &.error {
+            border: 2px solid var(--color-border-danger);
+            box-shadow: 0 0 4px 0 rgba(231, 44, 27, 0.2);
+        }
+    }
+}
+
+textarea.form-control {
+    height: 7.5rem;
+    padding: 0.625rem;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    overflow: auto;
+    margin: 0;
+
+    @include scrollbar_thin();
+    -webkit-overflow-scrolling: touch;
+}
+
+select.form-control {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    padding-right: 34px;
+
+    background-image: url("../images/icon_arrow_down_gray.svg");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 24px;
+}

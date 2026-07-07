@@ -1,0 +1,10 @@
+{# 標籤元件
+    使用前設定 tag 物件：{ text: 標籤文字, variant: success / warning / neutral }
+    單筆：{% set tag = { text: "Gufonet", variant: "success" } %}{% include "ui/tag/tag.html" %}
+    多筆：set tagList = [{ text, variant }, ...]，直接用 tag 當迴圈變數
+#}
+
+<div class="tag {{ tag.variant }}">
+    <span class="dot"></span>
+    <span class="text">{{ tag.text }}</span>
+</div>

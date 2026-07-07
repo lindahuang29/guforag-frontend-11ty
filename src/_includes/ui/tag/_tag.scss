@@ -1,0 +1,49 @@
+/*===============================
+    tag — 標籤
+    用法：
+    <div class="tag success">
+        <span class="dot"></span>
+        <span class="text">Gufonet</span>
+    </div>
+    變體：success / warning / neutral
+================================*/
+
+.tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 0.25rem 0.5rem;
+    box-sizing: border-box;
+    border-radius: 100px;
+    border: 1px solid var(--color-border-default);
+    background-color: var(--color-neutral-500);
+
+    .text {
+        font-size: 0.875rem;
+        color: var(--color-text-default);
+    }
+
+    .dot {
+        display: block;
+        width: 10px;
+        height: 10px;
+        border-radius: 100%;
+    }
+
+    &.success {
+        .dot {
+            background-color: var(--color-bg-success-default);
+        }
+    }
+    &.warning {
+        .dot {
+            background-color: var(--color-bg-warning-default);
+        }
+    }
+    &.neutral {
+        .dot {
+            background-color: var(--color-bg-lighter);
+        }
+    }
+}

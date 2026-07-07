@@ -1,0 +1,14 @@
+{
+  "name": "guforag",
+  "version": "1.0.0",
+  "description": "GufoRAG 切版 (Eleventy + SCSS)",
+  "private": true,
+  "scripts": {
+    "dev": "eleventy --serve --port 8090",
+    "build": "eleventy"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1",
+    "sass": "^1.69.0"
+  }
+}

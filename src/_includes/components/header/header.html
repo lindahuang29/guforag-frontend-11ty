@@ -1,0 +1,35 @@
+{# 全站共用主選單資料；同檔內被 mobile-nav 沿用 
+    使用前 front matter 設定 currentPage ← 當前頁面對應的 menu key #}
+{% set menuItems = [
+    { key: "dashboard", label: "儀表板", href: "#"},
+    { key: "serial", label: "序號管理", href: "#"},
+    { key: "system", label: "系統管理", href: "#"},
+    { key: "knowledge", label: "知識管理", href: "#"},
+    { key: "schedule", label: "排程管理", href: "#"},
+    { key: "test", label: "測試", href: "#"},
+    { label: "登出", href: "#", className: "logout"}
+] %}
+
+<header class="header">
+    <h1 class="logo">
+        <img src="./images/GufoRAG_LOGO_white.png" alt="GufoRAG logo">
+        <span class="version">V0.8.0</span>
+    </h1>
+    <nav class="desktop-nav">
+        <ul class="main-menu">
+            {% for item in menuItems %}
+            <li>
+                <a href="{{ item.href if item.href else '#' }}" class="{{ 'active' if item.key == currentPage }}{{ ' ' + item.className if item.className}}" title="{{ item.label }}">{{ item.label }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+
+    <button type="button" class="nav-toggle" aria-label="開啟手機選單">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+</header>
+
+{% include "components/mobile-nav/mobile-nav.html" %}

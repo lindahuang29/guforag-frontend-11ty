@@ -1,0 +1,24 @@
+{# 使用前 set: summaryData #}
+
+<div class="flex-row gap-24 mobile-column xs-gap-8" style="margin-top: 1rem;">
+    <div class="col-6-md col-12-sm flex-row gap-24 xs-gap-8">
+        <div class="stat-card success col-6-md">
+            <span class="num">{{ summaryData.completed }}</span>
+            <span class="label">Completed</span>
+        </div>
+        <div class="stat-card warning col-6-md">
+            <span class="num">{{ summaryData.pending }}</span>
+            <span class="label">Pending</span>
+        </div>
+    </div>
+    <div class="col-6-md col-12-sm flex-row gap-24 xs-gap-4">
+        <div class="stat-card info col-6-md">
+            <span class="num">{{ summaryData.progress }}</span>
+            <span class="label">Progress</span>
+        </div>
+        <div class="stat-card danger col-6-md">
+            <span class="num">{{ summaryData.failed }}</span>
+            <span class="label">Failed</span>
+        </div>
+    </div>
+</div>

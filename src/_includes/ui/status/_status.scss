@@ -1,0 +1,35 @@
+/*===============================
+    status — 狀態標籤（圓點 + 文字）
+    用法：<span class="status success"><span class="dot"></span>completed</span>
+    變體：success / warning / info / danger
+================================*/
+
+.status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 0.25rem 0.5rem;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background-color: var(--status-bg-default);
+
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 20px;
+    white-space: nowrap;
+
+    .dot {
+        display: block;
+        width: 6px;
+        height: 6px;
+        border-radius: 100%;
+        background-color: currentColor;
+    }
+
+    &.success { color: var(--color-text-success); }
+    &.warning { color: var(--color-text-warning); }
+    &.info  { color: var(--color-text-info); }
+    &.danger  { color: var(--color-text-danger); }
+}

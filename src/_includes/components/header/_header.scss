@@ -1,0 +1,139 @@
+.header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    width: 100%;
+    padding: 0.34375rem 1.5rem;
+    box-sizing: border-box;
+    background-color: var(--color-bg-light);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .logo {
+        margin: 0;
+
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+
+        img {
+            display: block;
+            width: 140px;
+            height: 34px;
+        }
+
+        .version {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--color-text-dark);
+        }
+    }
+
+}
+
+.desktop-nav {
+    .main-menu {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        li {
+            a {
+                display: block;
+                padding: 0.75rem 0.625rem;
+                padding-bottom: 0.625rem;
+                box-sizing: border-box;
+                border-bottom: 2px solid transparent;
+                font-size: 1.125rem;
+                font-weight: 500;
+                color: var(--color-text-default);
+
+                transition: border-color 0.3s ease, color 0.3s ease;
+
+                &:hover,
+                &.active {
+                    border-bottom-color: var(--color-border-primary);
+                    color: var(--color-text-primary);
+                }
+            }
+
+            &:has(a.logout) {
+                position: relative;
+                margin-left: -0.5rem;
+
+                a.logout {
+                    margin-left: 0.5rem;
+                }
+
+                &::before {
+                    content: "";
+                    display: block;
+                    width: 1px;
+                    height: 16px;
+                    background-color: var(--color-gray-300);
+                    position: absolute;
+                    left: 0;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+            }
+        }
+
+    }
+}
+
+// 漢堡選單
+.nav-toggle {
+    display: none;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+
+    span {
+        display: block;
+        width: 24px;
+        height: 2px;
+        margin: 5px auto;
+        background-color: var(--color-gray-200);
+        transition: all 0.3s ease;
+    }
+
+    &.active {
+        span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        span:nth-child(2) {
+            opacity: 0;
+        }
+
+        span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+    }
+}
+
+@media screen and (max-width: 991px) {
+    .desktop-nav {
+        display: none;
+    }
+
+    .header {
+        height: 60px;
+    }
+
+    .nav-toggle {
+        display: block;
+    }
+}

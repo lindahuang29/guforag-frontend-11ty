@@ -1,0 +1,33 @@
+/*
+-------------------------------------------------
+  main.scss — 只放 @use 組裝清單
+  新增有 scss 的元件時，請在對應分組加一行 @use。
+-------------------------------------------------
+*/
+
+// ===== base =====
+@use "var";
+@use "mixin";
+@use "base";
+@use "utilities";
+
+
+// ===== layouts =====
+@use "../_includes/layouts/layout";
+
+
+// ===== ui 小元件 =====
+@use "../_includes/ui/status/status";
+@use "../_includes/ui/tabs/tabs";
+@use "../_includes/ui/tag/tag";
+@use "../_includes/ui/stat-card/stat-card";
+@use "../_includes/ui/default-table/default-table";
+@use "../_includes/components/pagination/pagination";
+@use "../_includes/ui/form-group/form-group";
+@use "../_includes/ui/button/button";
+@use "../_includes/ui/footer/footer";
+
+// ===== components 大元件 =====
+@use "../_includes/components/header/header";
+@use "../_includes/components/mobile-nav/mobile-nav";
+@use "../_includes/components/dashboard-table/dashboard-table";

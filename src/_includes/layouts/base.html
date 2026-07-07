@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+    <div class="full-wrap">
+        {{ content | safe }}
+
+        {% include "ui/footer/footer.html" %}
+    </div>
+
+    {# 元件 JS（每加一個元件 js 在這加一行）#}
+    <script defer src="./js/pagination.js"></script>
+    <script defer src="./js/tabs.js"></script>
+    <script defer src="./js/dashboard-table.js"></script>
+    <script defer src="./js/mobile-nav.js"></script>
+</body>
+</html>

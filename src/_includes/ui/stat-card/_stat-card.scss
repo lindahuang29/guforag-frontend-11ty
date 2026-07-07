@@ -1,0 +1,62 @@
+/*===============================
+    stat-card
+    用法：
+    <div class="stat-card success">
+        <span class="num"></span>
+        <span class="label">Completed</span>
+    </div>
+    變體：success / warning / info / danger
+================================*/
+
+.stat-card {
+    min-height: 83px;
+    padding: 0.5rem 2.5rem;
+    box-sizing: border-box;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    border: 2px solid;
+    border-color: currentColor;
+
+    .num {
+        font-size: 3rem;
+        font-weight: 600;
+    }
+
+    .label {
+        width: auto;
+        font-size: 1.25rem;
+        font-weight: 500;
+    }
+
+    &.success {
+        color: var(--color-text-success);
+    }
+
+    &.warning {
+        color: var(--color-text-warning);
+    }
+
+    &.info {
+        color: var(--color-text-info);
+    }
+
+    &.danger {
+        color: var(--color-text-danger);
+    }
+
+    @media screen and (max-width: 766px) {
+        gap: 4px;
+        padding: 8px 8px;
+
+        .num {
+            font-size: 40px;
+        }
+        .label {
+            font-size: 1.125rem;
+        }
+    }
+}

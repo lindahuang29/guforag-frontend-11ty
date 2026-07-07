@@ -1,0 +1,124 @@
+/*===============================
+    dashboard-table — 儀表板列表表格
+    以 default-table 為基底，加上：
+    - 名稱欄的展開 icon
+    - 展開列（tabs + 四個頁籤面板：訊息／詳細資料／歷史紀錄／錯誤文件）
+================================*/
+@use "../../../scss/mixin" as *;
+
+.dashboard-table {
+    // table-layout: fixed;
+
+    thead {
+
+        th {
+            .th-name {
+                display: flex;
+                align-items: center;
+                gap: 0.625rem;
+
+                // 保留原 icon 佔位，使「名稱」與資料列名稱對齊
+                .icon-placeholder {
+                    flex-shrink: 0;
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+        }
+    }
+
+    tbody {
+        td {
+            text-align: left;
+        }
+
+        // 名稱欄：展開 icon + 文字
+        .cell-name {
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+
+            .row-btn {
+                flex-shrink: 0;
+                width: 24px;
+                height: 24px;
+                border: none;
+                border-radius: 40px;
+                background-color: transparent;
+                background-image: url(../images/icon_table-right.svg);
+                background-repeat: no-repeat;
+                background-size: contain;
+                cursor: pointer;
+
+                &.active {
+                    background-color: var(--color-bg-dark);
+                    background-image: url(../images/icon_table-down.svg);
+                }
+            }
+        }
+
+        // 展開後的明細列
+        // 預設收合；加 .is-open 才展開（由 dashboard-table.js 切換）
+        .row-detail {
+
+            background-color: var(--color-bg-dark);
+            border-bottom: none;
+
+            thead tr {
+                border-bottom: none;
+                background-color: var(--table-form-head-bg);
+            }
+
+            td {
+                padding: 0;
+            }
+
+            // grid 0fr → 1fr 滑動展開：自適應內容高度，無需固定值
+            .detail-collapse {
+                display: grid;
+                grid-template-rows: 0fr;
+                transition: grid-template-rows 0.3s ease;
+            }
+
+            // 收合時需 overflow:hidden + min-height:0，內容才會被裁切
+            .detail-collapse__inner {
+                overflow: hidden;
+                min-height: 0;
+            }
+
+            &.is-open .detail-collapse {
+                grid-template-rows: 1fr;
+
+                td {
+                    padding: 0.625rem;
+                }
+            }
+
+            .detail-panel {
+                padding: 0.625rem;
+                box-sizing: border-box;
+            }
+
+            .detail-text {
+                font-size: 1rem;
+                line-height: 20px;
+                letter-spacing: -0.08px;
+                text-align: center;
+                color: var(--color-text-dark);
+            }
+
+            // 詳細資料頁籤的 JSON 區塊（等寬字、保留排版、可橫向捲動）
+            .detail-json {
+                margin: 0;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+                font-size: 1rem;
+                line-height: 1.25;
+                color: var(--color-text-dark);
+                white-space: pre;
+                overflow-x: auto;
+
+                @include scrollbar_thin();
+            }
+        }
+    }
+}

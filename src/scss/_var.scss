@@ -1,0 +1,211 @@
+:root {
+    --fontFamily: NotoSans, "PingFangTC", Microsoft JhengHei, "微軟正黑體", "Helvetica", "sans-serif";
+
+    // ---------------------------------------------------------
+    // 1. Color Primitives（原始色票）
+    // ---------------------------------------------------------
+
+    // red
+    --color-red-900: #4f0909;
+    --color-red-800: #681010;
+    --color-red-700: #831414;
+    --color-red-600: #9c2121;
+    --color-red-500: #b03d3d;
+    --color-red-400: #c76b6b;
+    --color-red-300: #deaaaa;
+    --color-red-200: #f1d8d8;
+    --color-red-100: #fcf4f4;
+
+    // orange
+    --color-orange-900: #66391d;
+    --color-orange-800: #99562b;
+    --color-orange-700: #cc723a;
+    --color-orange-600: #fe883d;
+    --color-orange-500: #ff9756;
+    --color-orange-400: #ffbc91;
+    --color-orange-300: #ffd2b6;
+    --color-orange-200: #ffe9da;
+    --color-orange-100: #fff4ec;
+
+    // yellow
+    --color-yellow-900: #5a3c08;
+    --color-yellow-800: #744f12;
+    --color-yellow-700: #91661b;
+    --color-yellow-600: #a87a2a;
+    --color-yellow-500: #bc9143;
+    --color-yellow-400: #d0ad71;
+    --color-yellow-300: #e3cca6;
+    --color-yellow-200: #f2e8d4;
+    --color-yellow-100: #fbf8f1;
+
+    // green
+    --color-green-900: #0b4a35;
+    --color-green-800: #0f6348;
+    --color-green-700: #137d5a;
+    --color-green-600: #22946e;
+    --color-green-500: #3ba883;
+    --color-green-400: #68c1a2;
+    --color-green-300: #9ddbc6;
+    --color-green-200: #d0efe2;
+    --color-green-100: #eff9f4;
+
+    // sky
+    --color-sky-900: #0b5662;
+    --color-sky-800: #137282;
+    --color-sky-700: #1e92a5;
+    --color-sky-600: #26a9be;
+    --color-sky-500: #2eb9ce;
+    --color-sky-400: #59c9d9;
+    --color-sky-300: #8ddbe5;
+    --color-sky-200: #c6eef3;
+    --color-sky-100: #ecfafc;
+
+    // blue
+    --color-blue-900: #002f57;
+    --color-blue-800: #003e73;
+    --color-blue-700: #005195;
+    --color-blue-600: #005eac;
+    --color-blue-500: #04549d;
+    --color-blue-400: #4d8dd0;
+    --color-blue-300: #93bfea;
+    --color-blue-200: #d1e4f8;
+    --color-blue-100: #eff6fd;
+
+    // gray
+    --color-gray-900: #0b0c0b;
+    --color-gray-800: #141516;
+    --color-gray-700: #181818;
+    --color-gray-600: #1e1e1e;
+    --color-gray-500: #5e616e;
+    --color-gray-400: #777777;
+    --color-gray-300: #b0b0b0;
+    --color-gray-200: #eaeaea;
+    --color-gray-100: #9199b633; // 含透明度 a=0.2
+
+    // neutral（皆含透明度）
+     --color-neutral-500: #b8c1e01a; // a=0.1
+     --color-neutral-300: #b8c1e00d; // a=0.05
+
+    // basic
+    --color-basic-black: #000000;
+    --color-basic-white: #ffffff;
+
+
+    // ---------------------------------------------------------
+    // 2. Color Roles（語意角色，引用 Primitives）
+    // ---------------------------------------------------------
+
+    // primary
+    --color-primary-lighter: var(--color-blue-400);
+    --color-primary-light: var(--color-blue-500);
+    --color-primary: var(--color-blue-600);
+    --color-primary-dark: var(--color-blue-700);
+    --color-primary-darker: var(--color-blue-800);
+
+    // secondary
+    --color-secondary-lighter: var(--color-sky-300);
+    --color-secondary-light: var(--color-sky-400);
+    --color-secondary: var(--color-sky-500);
+    --color-secondary-dark: var(--color-sky-600);
+    --color-secondary-darker: var(--color-sky-700);
+
+    // warning
+    --color-warning-lighter: var(--color-yellow-400);
+    --color-warning-light: var(--color-yellow-500);
+    --color-warning: var(--color-yellow-600);
+    --color-warning-dark: var(--color-yellow-700);
+    --color-warning-darker: var(--color-yellow-800);
+
+    // danger
+    --color-danger-lighter: var(--color-red-400);
+    --color-danger-light: var(--color-red-500);
+    --color-danger: var(--color-red-600);
+    --color-danger-dark: var(--color-red-700);
+    --color-danger-darker: var(--color-red-800);
+
+    // success
+    --color-success-lighter: var(--color-green-400);
+    --color-success-light: var(--color-green-500);
+    --color-success: var(--color-green-600);
+    --color-success-dark: var(--color-green-700);
+    --color-success-darker: var(--color-green-800);
+
+    // info
+    --color-info-lighter: var(--color-blue-300);
+    --color-info-light: var(--color-blue-400);
+    --color-info: var(--color-blue-500);
+    --color-info-dark: var(--color-blue-600);
+    --color-info-darker: var(--color-blue-700);
+    
+
+    // ---------------------------------------------------------
+    // 3. Component Tokens（元件語意，引用 Roles / Primitives）
+    // ---------------------------------------------------------
+
+    // 背景 bg
+    --color-bg-primary-default: var(--color-primary);
+    --color-bg-primary-strong: var(--color-primary-dark);
+    --color-bg-secondary: var(--color-secondary);
+    --color-bg-info-default: var(--color-info);
+    --color-bg-info-strong: var(--color-info-dark);
+    --color-bg-success-default: var(--color-success);
+    --color-bg-warning-default: var(--color-warning);
+    --color-bg-warning-strong: var(--color-warning-dark);
+    --color-bg-danger-default: var(--color-danger);
+    --color-bg-danger-strong: var(--color-danger-dark);
+    --color-bg-default: var(--color-gray-700);
+    --color-bg-light: var(--color-gray-600);
+    --color-bg-lighter: var(--color-gray-400);
+    --color-bg-dark: var(--color-gray-800);
+    --color-bg-darker: var(--color-gray-900);
+
+    // 文字 text
+    --color-text-default: var(--color-gray-200);
+    --color-text-dark: var(--color-gray-300);
+    --color-text-darker: var(--color-gray-400);
+    --color-text-primary: var(--color-primary);
+    --color-text-secondary: var(--color-secondary);
+    --color-text-info: var(--color-info);
+    --color-text-warning: var(--color-warning);
+    --color-text-danger: var(--color-danger);
+    --color-text-success: var(--color-success);
+    --color-text-white: var(--color-basic-white);
+
+    // 邊框 border
+    --color-border-default: var(--color-gray-100);
+    --color-border-primary: var(--color-primary);
+    --color-border-secondary: var(--color-secondary);
+    --color-border-info: var(--color-info);
+    --color-border-warning: var(--color-warning);
+    --color-border-danger: var(--color-danger);
+    --color-border-success: var(--color-success);
+
+    // 按鈕 button
+    --button-primary-default: var(--color-primary);
+    --button-primary-strong: var(--color-primary-dark);
+    --button-secondary-default: var(--color-secondary);
+    --button-secondary-strong: var(--color-secondary-dark);
+    --button-danger-default: var(--color-danger);
+    --button-danger-strong: var(--color-danger-dark);
+    --button-warning-default: var(--color-warning);
+    --button-warning-strong: var(--color-warning-dark);
+    --button-success-default: var(--color-success);
+    --button-success-strong: var(--color-success-dark);
+    --button-info-default: var(--color-info);
+    --button-info-strong: var(--color-info-dark);
+    --button-normal-default: var(--color-gray-400);
+    --button-normal-strong: var(--color-gray-500);
+
+    // 表格 table（部分引用其他 Component Tokens）
+    --table-normal-head-bg: var(--color-gray-800);
+    --table-normal-head-text: var(--color-text-default);
+    --table-normal-border: var(--color-border-default);
+    --table-normal-content: var(--color-text-dark);
+    --table-form-head-bg: var(--color-neutral-300);
+    --table-form-head-text: var(--color-text-default);
+    --table-form-border: var(--color-border-default);
+    --table-form-content: var(--color-text-dark);
+
+    // 狀態 status
+    --status-bg-default: var(--color-neutral-500);
+}

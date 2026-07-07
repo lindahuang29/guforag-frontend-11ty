@@ -1,0 +1,102 @@
+{# 儀表板資料表：
+    每筆資料 = 一組「主列 row-main + 明細列 row-detail」
+    使用前 front matter 設定：
+        rows: [{ id, name, start, end, duration, type, status, statusLabel }]
+    可選：
+        activeTab ← 展開後預設亮的頁籤 key，未設則用第一個頁籤 message
+    主列短欄位取自 rows；明細列頁籤內容為各 tab-*.html 子片段（message / detail / history / error）
+    展開狀態 .is-open、頁籤切換 .is-active 皆以 class 表達，行為由 tabs.js 控制
+
+    tabList ← 下方用 {% set %} 寫死的頁籤清單，每項 { key, label }：
+        key    ← 頁籤識別碼，需與面板的 data-tab 屬性及 tab-*.html 檔名一致（增減頁籤時改這裡）
+        label  ← 頁籤上顯示的文字
+#}
+
+<div class="scrollTable">
+    <table class="default-table dashboard-table" style="min-width: 1200px;">
+        <thead>
+            <tr>
+                <th>
+                    <span class="th-name">
+                        <span class="icon-placeholder"></span>
+                        名稱
+                    </span>
+                </th>
+                <th>開始時間</th>
+                <th>結束時間</th>
+                <th>持續時間</th>
+                <th>操作類型</th>
+                <th>狀態</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% set tabList = [
+            { key: "message", label: "訊息" },
+            { key: "detail", label: "詳細資料" },
+            { key: "history", label: "歷史紀錄" },
+            { key: "error", label: "錯誤文件" }
+            ] %}
+
+            {% set activeTab = activeTab or "message" %}
+
+            {% for row in rows %}
+            <tr class="row-main" data-row-id="{{ row.id }}">
+                <td>
+                    <span class="cell-name">
+                        <button type="button" class="row-btn" aria-expanded="false"
+                            aria-controls="detail-{{ row.id }}"></button>
+                        {{ row.name }}
+                    </span>
+                </td>
+                <td>{{ row.start }}</td>
+                <td>{{ row.end }}</td>
+                <td>{{ row.duration }}</td>
+                <td>{{ row.type }}</td>
+                <td>
+                    <span class="status {{ row.status }}">
+                        <span class="dot"></span>
+                        {{ row.statusLabel }}
+                    </span>
+                </td>
+            </tr>
+            <tr class="row-detail" id="detail-{{ row.id }}">
+                <td colspan="6">
+                    <div class="detail-collapse">
+                        <div class="detail-collapse__inner">
+                            {# js-tabs-wrap：頁籤與面板的共同容器，tabs.js 以它為界切換對應面板（.js-tabs 為按鈕列、data-tab 對應各面板） #}
+                            <div class="detail-panel js-tabs-wrap">
+                                <div class="tabs js-tabs">
+                                    {% for t in tabList %}
+                                    <button type="button"
+                                        class="tab js-tab {% if t.key == activeTab %}is-active{% endif %}"
+                                        data-tab="{{ t.key }}">{{ t.label }}</button>
+                                    {% endfor %}
+                                </div>
+
+                                <div class="tab-panels tab-panels-scroll">
+                                    <div class="tab-panel {% if activeTab == 'message' %}is-active{% endif %}"
+                                        data-tab="message">
+                                        {% include "components/dashboard-table/tab-message.html" %}
+                                    </div>
+                                    <div class="tab-panel {% if activeTab == 'detail' %}is-active{% endif %}"
+                                        data-tab="detail">
+                                        {% include "components/dashboard-table/tab-detail.html" %}
+                                    </div>
+                                    <div class="tab-panel {% if activeTab == 'history' %}is-active{% endif %}"
+                                        data-tab="history">
+                                        {% include "components/dashboard-table/tab-history.html" %}
+                                    </div>
+                                    <div class="tab-panel {% if activeTab == 'error' %}is-active{% endif %}"
+                                        data-tab="error">
+                                        {% include "components/dashboard-table/tab-error.html" %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

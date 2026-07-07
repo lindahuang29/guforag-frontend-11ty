@@ -1,0 +1,61 @@
+---
+layout: layouts/page-shell.html
+title: GufoRAG::儀表板
+permalink: 1-1_homepage.html
+
+currentPage: dashboard
+
+# 列表的「短欄位」資料化；示意 3 筆。
+rows:
+- id: 1
+  name: 目錄資料
+  start: "2025-08-20 06:04:53"
+  end: "2025-08-20 04:04:53"
+  duration: 29.905s
+  type: sync
+  status: danger
+  statusLabel: failed
+- id: 2
+  name: 2.01版手冊
+  start: "2025-08-20 06:04:53"
+  end: "2025-08-20 04:04:53"
+  duration: 17.849s
+  type: sync
+  status: success
+  statusLabel: completed
+- id: 3
+  name: 目錄資料2
+  start: "2025-08-19 06:04:53"
+  end: "2025-08-19 02:04:53"
+  duration: 19.905s
+  type: sync
+  status: warning
+  statusLabel: pending
+---
+
+<div class="flex-row justify-content-end gap-8">
+  {% set tagList = [
+    { text: "Gufonet",  variant: "warning" },
+    { text: "Weaviate", variant: "success" }
+  ] %}
+  {% for tag in tagList %}
+    {% include "ui/tag/tag.html" %}
+  {% endfor %}
+</div>
+
+{% set summaryData = {
+  completed: 1,
+  pending: 1,
+  progress: 1,
+  failed: 1
+} %}
+{% include "components/dashboard-summary/dashboard-summary.html" %}
+
+<div class="flex-row column gap-16" style="margin-top: 1.5rem;">
+  {# 預設亮第一個頁籤（message）由 dashboard-table 內建；
+  若要改預設，於此 include 前 {% set activeTab = "detail" %} 覆寫即可。 #}
+  {% include "components/dashboard-table/dashboard-table.html" %}
+
+  {% set dataTotal = 3 %}
+  {% include "components/pagination/pagination.html" %}
+</div>

@@ -1,0 +1,44 @@
+@use "../../../scss/mixin" as *;
+
+.scrollTable {
+    width: 100%;
+    overflow-x: auto;
+
+    @include scrollbar_thin();
+}
+
+.default-table {
+    width: 100%;
+    position: relative;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    thead {
+        tr {
+            background-color: var(--table-normal-head-bg);
+            th {
+                padding: 0.625rem;
+                box-sizing: border-box;
+                text-align: left;
+                font-size: 1rem;
+                font-weight: 500;
+                color: var(--color-text-default);
+                word-break: break-all;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            border-bottom: 1px solid var(--color-border-default);
+
+            td {
+                padding: 0.625rem;
+                box-sizing: border-box;
+                vertical-align: middle;
+                font-size: 1rem;
+                color: var(--color-text-dark);
+            }
+        }
+    }
+}
