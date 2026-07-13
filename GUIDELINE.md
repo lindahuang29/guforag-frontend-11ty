@@ -2,14 +2,14 @@
 
 本文件是這個專案的**規範**：定義檔案結構、語法白名單、各層級的規則，以及與 React 的對應關係。
 適用對象：產生或修改本專案程式碼的人與 AI，以及將本專案轉換成 React 的人與 AI。
-兩個範例頁（`src/4-2_qaHistory_detail.html`、`src/1-1-4_columnSelect_excel.html`）是本規範的標準實作。
+範例頁 `src/1-1_homepage.html`（儀表板）是本規範的標準實作；各頁面與元件的逐一說明見 [`260629_GufoRAG_切版說明.md`](260629_GufoRAG_切版說明.md)。
 執行方式見 [README.md](README.md)。
 
-核心原則：**沿用設計團隊既有的 class 命名、markup 結構與 SCSS 寫法**（與上層資料夾的原始切版一致）。
-本範本相對於原始切版只改三件事：
+核心原則：**沿用設計團隊既有的 class 命名、markup 結構與 SCSS 寫法**。
+本專案相對於整頁式切版只改三件事：
 
 1. 檔案組織：每個元件一個資料夾（html + scss + js 同住）
-2. jQuery 改為元件自己的 vanilla JS（標準 DOM API）
+2. 互動行為是各元件自己的 vanilla JS（標準 DOM API），不用 jQuery 與任何第三方套件
 3. 頁面用 include 組合、重複內容寫成 front matter 資料
 
 ---
@@ -17,13 +17,13 @@
 ## 1. 檔案結構
 
 ```
-react-friendly-example/
+GufoRAG/
 ├── src/
 │   ├── _includes/
 │   │   ├── layouts/                   ← 整頁模板（只放模板，不放元件）
-│   │   │   ├── base.html              ←   <head> + 全頁框架 + script 清單
-│   │   │   ├── page-shell.html        ←   一般頁外殼：header + main 容器 + footer
-│   │   │   └── _layout.scss           ←   骨架樣式（.full-wrap、.wrap、.main、.page-title）
+│   │   │   ├── base.html              ←   <head> + 全頁外框 + footer + script 清單
+│   │   │   ├── page-shell.html        ←   一般頁外殼：header + <main> 容器
+│   │   │   └── _layout.scss           ←   骨架樣式（.full-wrap、.main）
 │   │   ├── components/                ← 大元件：會用到其他元件的組合區塊
 │   │   │   └── <元件名>/              ←   一個元件 = 一個資料夾
 │   │   │       ├── <元件名>.html      ←     元件 HTML（唯一正本）
@@ -31,8 +31,8 @@ react-friendly-example/
 │   │   │       └── <元件名>.js        ←     元件行為（有才放）
 │   │   └── ui/                        ← 小元件：不依賴其他元件的積木
 │   ├── scss/
-│   │   ├── _var.scss                  ←   顏色變數（與原始切版的 _var.scss 相同）
-│   │   ├── _mixin.scss                ←   scrollbar 等 mixin（與原始切版相同）
+│   │   ├── _var.scss                  ←   顏色變數（三層 design tokens：Primitives → Roles → Component Tokens）
+│   │   ├── _mixin.scss                ←   scrollbar 等 mixin
 │   │   ├── _base.scss                 ←   html/body/標籤預設
 │   │   ├── _utilities.scss            ←   text-*、flex-row、gap-*、col-* 等工具 class
 │   │   └── main.scss                  ←   只放 @use 組裝清單
@@ -46,18 +46,18 @@ react-friendly-example/
 | 桶 | 判斷句 | 例 |
 |---|---|---|
 | `layouts/` | 是整頁的**模板**嗎？ | base、page-shell |
-| `components/` | 它的 html / scss / js **會用到其他元件**，或是某大元件的**專屬子片段**嗎？（大） | header、sources-block、multi-select-box、mobile-nav |
-| `ui/` | **不依賴任何其他元件**的最小單位？（小） | button、modals、pagination-input |
+| `components/` | 它的 html / scss / js **會用到其他元件**，或是某大元件的**專屬子片段**嗎？（大） | header、mobile-nav、dashboard-summary、dashboard-table、pagination |
+| `ui/` | **不依賴任何其他元件**的最小單位？（小） | button、tabs、stat-card、tag |
 
-「專屬子片段」指由某個大元件 include、不會單獨使用的部分：`mobile-nav`（header 的手機版選單，共用 header 的 `menuItems`、行為依賴 `modals.js`）、`disclaimer-modal`（footer 的免責聲明跳窗，套用 `modals` 的樣式）。它們放在 `components/` 而非 `ui/`。
+「專屬子片段」指由某個大元件 include、不會單獨使用的部分：`mobile-nav`（header 的手機版選單，沿用 header 的 `menuItems`，由 header include）、`dashboard-table` 的 `tab-*.html`（明細列的四個頁籤面板，直接住在 dashboard-table 資料夾）。它們放在 `components/`（或所屬大元件的資料夾）而非 `ui/`。
 
 ### 1-2. 元件檔案規則
 
-- html / scss / js 三種檔案**有才放**：純樣式元件只有 scss（button）、純行為元件只有 js + scss（accordion）
+- html / scss / js 三種檔案**有才放**：純樣式元件只有 scss（button、stat-card）、純行為元件只有 js + scss（tabs——結構直接寫在使用它的元件裡）
 - 有 scss → 在 `scss/main.scss` 對應分組加一行 `@use`
 - 有 js → 在 `eleventy.config.js` 的 passthrough 清單和 `layouts/base.html` 的 script 清單各加一行
 - 同一個元件絕不複製貼上；要用就 include，修改只改它資料夾裡的那一份
-- 誰的按鈕開的彈窗，彈窗就 include 在誰裡面（例：footer 內含 disclaimer-modal）
+- 誰的按鈕開的彈窗，彈窗就 include 在誰裡面
 
 ---
 
@@ -85,8 +85,9 @@ react-friendly-example/
 ```yaml
 ---
 layout: layouts/page-shell.html        # 或 layouts/base.html
-title: GufoFAQ::頁面標題
+title: GufoRAG::頁面標題
 permalink: 檔名.html                   # 輸出到 dist/ 的檔名
+currentPage: dashboard                 # 對應 header menuItems 的 key（高亮選單；用 page-shell 的頁要設）
 # （頁面資料寫在這之後）
 ---
 ```
@@ -94,7 +95,7 @@ permalink: 檔名.html                   # 輸出到 dist/ 的檔名
 | layout | 自動提供 | 適用 |
 |---|---|---|
 | `layouts/page-shell.html` | `<head>` + header + main 容器 + footer + script 清單 | 一般頁面 |
-| `layouts/base.html` | 只有 `<head>` + 空白外框 + script 清單 | 特殊版型（如登入頁） |
+| `layouts/base.html` | 只有 `<head>` + 空白外框 + footer + script 清單 | 特殊版型（如登入頁） |
 
 ### 3-2. 內容區規則
 
@@ -114,8 +115,8 @@ permalink: 檔名.html                   # 輸出到 dist/ 的檔名
 
 ## 4. HTML / CSS 規則
 
-- **class 命名沿用既有系統**（`component.scss` 的詞彙：`.header`、`.modals`、`.form-group`、`.accordion-btn`…）；新元件的命名跟隨同樣風格
-- 狀態 class 沿用既有慣例：`.active`、`.open`、`.done`、`.error`、`.disabled`（轉換後 = React state / props）
+- **class 命名沿用既有系統**（既有元件的詞彙：`.header`、`.form-group`、`.stat-card`、`.js-tabs`…）；新元件的命名跟隨同樣風格
+- 狀態 class 沿用既有慣例：`.active`／`.is-active`、`.is-open`、`.error`、`.disabled`（轉換後 = React state / props）
 - SCSS 寫法沿用既有風格（巢狀、`&` 修飾）；顏色用 `_var.scss` 變數
 - 每個元件的 scss 只寫自己的 class；**A 元件的 scss 禁止出現 B 元件的 class**
 - 禁止依頁面覆寫元件（`.page-xxx .button {...}`）
@@ -128,27 +129,23 @@ permalink: 檔名.html                   # 輸出到 dist/ 的檔名
 每個有互動的元件，行為寫在自己資料夾的 `<元件名>.js`：
 
 ```
-ui/pagination-input/
-├── pagination-input.html
-├── _pagination-input.scss
-└── pagination-input.js     ← 這個元件的行為
+components/pagination/
+├── pagination.html
+├── _pagination.scss
+└── pagination.js     ← 這個元件的行為
 ```
 
 ### 寫法規則
 
 - **只用標準 DOM API**（`querySelectorAll`、`addEventListener`、`classList`、`closest`…，MDN 查得到的才能用）；禁止 jQuery 與任何第三方套件
-- 只操作**自己元件**的 class；要操作別的元件，呼叫該元件 js 提供的函式（例：footer.js 呼叫 modals.js 的 `openModal()`）
+- 只操作**自己元件**的 class；跨元件時各管各的（例：`dashboard-table.js` 只管列展開，展開後的頁籤切換交給 `tabs.js`）；要操作別的元件，呼叫該元件 js 提供的函式
 - 包在 `DOMContentLoaded` 裡綁定；同元件可能出現多次時用 `querySelectorAll().forEach()`
-- 跳窗用 `<dialog>` 元素 + `showModal()` / `close()`（標準 API，與既有切版相同）
+- 跳窗用 `<dialog>` 元素 + `showModal()` / `close()`（標準 API）
 
 ### 新增元件 js 的登記（各加一行）
 
 1. `eleventy.config.js`：passthrough 清單加 `"src/_includes/桶/元件/元件.js": "js/元件.js"`
 2. `layouts/base.html`：script 清單加 `<script defer src="./js/元件.js"></script>`
-
-### tag 多選（`ui/multi-select`）
-
-切版需要展示互動，所以 tag 式多選由本範本提供：在原生 `<select multiple class="multiSelect">` 上加 `ui/multi-select/multi-select.js`，增強成標籤（可 `×` 移除）＋下拉複選（不關閉）＋搜尋過濾＋placeholder。**原生 `<select>` 仍是唯一資料來源**——操作都寫回它的 `option.selected` 並觸發 `change`。轉 React 時對應 `react-select`（isMulti），value 陣列＝原生 select 的選取。
 
 ### 不在切版範圍的互動
 
@@ -156,32 +153,7 @@ ui/pagination-input/
 
 ---
 
-## 6. 元件使用一覽
-
-### 需要參數的元件
-
-| 元件 | 參數 |
-|---|---|
-| `ui/breadcrumb` | include 前 `{% set breadcrumbItems = [{ label, href }] %}`；最後一項不給 `href` = 目前頁 |
-| `ui/pagination-input` | include 前 set `pagerCurrent`、`pagerTotal` |
-| `components/step-btn-wrap` | front matter `steps:`（`label`、`done`）；include 前 set `stepPrevHref`、`stepNextHref` |
-| `components/multi-select-box` | front matter `fields:`（`label`、`placeholder`、`options`（`text`/`selected`）、`preview`、`error` 選填）；左欄的 `<select class="multiSelect">` 由 `ui/multi-select` 增強成 tag 多選 |
-| `components/sources-block` | front matter `sources:`（`no`、`file`、`dataset`、`title`、`time`、`content`、`note1`、`note2`、`reference`）；每筆用子元件 `source-row.html` 渲染。外層的 `.sources-block` 是設計師原有的語意／JS 鉤子 class，本身不帶樣式（視覺來自 `.block` + default-table），刻意保留 |
-| `components/qa-detail-info` | front matter `conversation:`（`chatroomId`、`id`、`time`、`intent`、`userMessage`、`satisfaction`、`feedback`）；AI 回答內容為長文示範，依 §3-2 寫死在元件 |
-
-### 自動引入
-
-`header`（內含 mobile-nav）、`footer`（內含 disclaimer-modal）由 `page-shell` 提供，頁面不需 include。
-含子元件的元件：`sources-block`（含 `source-row`）、`header`（含 `mobile-nav`）、`footer`（含 `disclaimer-modal`）。
-
-### 純樣式 / 純行為元件（直接寫 class）
-
-`button`、`block`、`default-table`、`form-group`、`form-table`、`link-file`、`modals`、`accordion`、`multi-select`。
-結構以兩個範例頁為準（`multi-select` 無 html，靠 js 增強 `.multiSelect`）。
-
----
-
-## 7. React 轉換對照
+## 6. React 轉換對照
 
 | 本專案 | React |
 |---|---|
@@ -192,19 +164,18 @@ ui/pagination-input/
 | `{% include %}` | `<Xxx />` |
 | `{% set xxx %}` | props |
 | front matter 資料 + `{% for %}` | `data.map(item => <Row item={item} />)` |
-| `.open`、`.active`、`.done`、`.error` 狀態 class | `useState` 布林 / props（`className={open ? "x open" : "x"}`） |
+| `.active`／`.is-active`、`.is-open`、`.error` 狀態 class | `useState` 布林 / props（`className={open ? "x is-open" : "x"}`） |
 | `<dialog>` + `showModal()` | React 可沿用 dialog，或換 Dialog 元件 |
-| `ui/multi-select`（增強原生 `<select multiple>`） | `react-select`（isMulti）；value 陣列＝原生 select 的選取，行為（標籤／搜尋／複選）即規格 |
 | `_var.scss` 顏色變數 | 全域引入一次，元件照用 `var(--...)` |
 
-accordion 的「一次只開一列」在本範本用全域 DOM 查詢（`document.querySelectorAll(".accordion-btn.open")`）實作，跨整頁所有表格。轉 React 時改由各 accordion 元件自管狀態（記住開啟的列 index），不要跨元件共用，否則同頁多個表格會互相關閉。
+tabs 的頁籤切換在本範本用 document 層級的事件委派實作、以 `.js-tabs-wrap` 為範圍界線（同頁多組頁籤互不干擾）；轉 React 時改由各 Tabs 元件自管 `activeTab` state，不要跨元件共用。pagination 的頁碼由 JS 依 `data-total` 動態生成，轉 React 時改為 state 驅動渲染（`current` / `totalPages`）。
 
 HTML → JSX 為機械式替換：`class`→`className`、標籤自閉合、`{# #}`→`{/* */}`。
 CSS 不需任何翻譯：交付的樣式即正式環境的最終樣式。
 
 ---
 
-## 8. 交付前檢查清單
+## 7. 交付前檢查清單
 
 - [ ] `npm run build` 成功；`dist/` 每一頁雙擊可開、外觀與互動正確
 - [ ] 沒有 jQuery 與任何第三方 JS 套件；js 只用標準 DOM API
@@ -216,38 +187,42 @@ CSS 不需任何翻譯：交付的樣式即正式環境的最終樣式。
 
 ---
 
-## 9. Dos & Don'ts
+## 8. Dos & Don'ts
 
 ```html
 <!-- ❌ 每頁貼一份 header（170 行 × 6 頁） -->
 <header class="header">...</header>
 
 <!-- ✅ page-shell 自動提供；其他元件用 include -->
-{% include "components/sources-block/sources-block.html" %}
+{% include "components/dashboard-summary/dashboard-summary.html" %}
 ```
 
 ```html
 <!-- ❌ 表格列複製 16 次 -->
-<tr>...</tr><tr class="detail-row">...</tr>
+<tr class="row-main">...</tr><tr class="row-detail">...</tr>
 <!-- ……× 16 -->
 
-<!-- ✅ 資料 + 迴圈，示意 3 筆 -->
-{% for source in sources %}
-{% include "components/sources-block/source-row.html" %}
+<!-- ✅ 資料寫在頁面 front matter 的 rows，元件內用迴圈渲染，示意 3 筆 -->
+{% for row in rows %}
+<tr class="row-main">…</tr>
+<tr class="row-detail">…</tr>
 {% endfor %}
 ```
 
 ```js
 // ❌ jQuery，且所有頁面的行為擠在一支 main.js
-$(".accordion-btn").on("click", function () { $(this).toggleClass("open"); });
+$(".js-tab").on("click", function () { $(this).addClass("is-active"); });
 
-// ✅ 標準 DOM API，寫在 ui/accordion/accordion.js
-btn.addEventListener("click", function () { btn.classList.toggle("open"); });
+// ✅ 標準 DOM API，寫在 ui/tabs/tabs.js（事件委派 + closest）
+document.addEventListener("click", (e) => {
+  const tab = e.target.closest(".js-tab");
+  if (tab) tab.classList.add("is-active");
+});
 ```
 
 ```scss
 /* ❌ 在 A 元件的 scss 裡改 B 元件 */
-.sources-block .button { padding: 0; }
+.dashboard-table .button { padding: 0; }
 
 /* ✅ 各自的樣式寫在各自的檔案 */
 ```

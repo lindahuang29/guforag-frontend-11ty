@@ -1,0 +1,70 @@
+# 推上 main 時自動 build 並發布 dist/ 到 GitHub Pages，
+# 讓大家用瀏覽器開 https://shawnshen1206.github.io/guforag-frontend-11ty/ 看切版。
+# 一次性設定：GitHub repo → Settings → Pages → Build and deployment → Source 選「GitHub Actions」。
+# dist/ 在 .gitignore 內（build 產物不進版控），故由本流程現建現部署，不需 gh-pages 分支。
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # 也可在 Actions 頁手動觸發
+
+# GitHub Pages 部署所需權限（官方 deploy-pages 用 OIDC）
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時只跑一個部署；新 push 進來時取消上一個未完成的
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc # 單一真實來源：本機 / CI 同一版 Node
+          cache: npm
+
+      - run: npm ci
+
+      # build 紅就擋下部署
+      - run: npm run build
+
+      # 站台根 URL 的進站點：轉到儀表板頁。
+      # 只在部署層補（src/ 是切版正本不動；本機 build 的 dist/ 也維持交付原樣）。
+      - name: Add root redirect for Pages
+        run: |
+          cat > dist/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="zh-Hant">
+          <head>
+              <meta charset="UTF-8">
+              <meta name="robots" content="noindex, nofollow">
+              <meta http-equiv="refresh" content="0; url=./1-1_homepage.html">
+              <title>GufoRAG</title>
+          </head>
+          <body>
+              <a href="./1-1_homepage.html">前往儀表板</a>
+          </body>
+          </html>
+          EOF
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
